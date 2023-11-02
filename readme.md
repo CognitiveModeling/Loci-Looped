@@ -23,7 +23,7 @@ conda activate loci-l
 
 ## Dataset and trained models
 
-Preprocessed datasets together with pretrained models and results can be found [here](todo)
+Preprocessed datasets together with pretrained models and results can be found [here](https://nc.mlcloud.uni-tuebingen.de/index.php/s/xyWpq85sGRrT9BL)
 
 Download the *pretrained* folder and place it in the */out* folder. 
 Download the *data* folder and place it in the */data* folder. 
