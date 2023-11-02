@@ -1,0 +1,81 @@
+{
+   "model_path": "adept_level2",
+   "datatype": "adept",
+   "dataset": "ADEPT",
+   "learning_rate": 3.333e-05,
+   "num_updates": 800000,
+   "max_epochs": 1000,
+   "max_updates": 1150000,
+   "phases": {
+      "start_inner_loop": 60000,
+      "shufleslots_end": 30000,
+      "entity_pretraining_phase2_end": 50000,
+      "entity_pretraining_phase1_end": 30000,
+      "background_pretraining_end": 0
+   },
+   "defaults": {
+      "num_workers": 2,
+      "prefetch_factor": 2,
+      "statistics_offset": 10,
+      "load_optimizers": false,
+      "teacher_forcing": 10,
+      "skip_frames": 3,
+      "error_dropout": 0.1
+   },
+   "bptt": {
+      "bptt_start_timestep": 0,
+      "bptt_steps": 2,
+      "bptt_steps_max": 2,
+      "increase_bptt_steps_every": 200000
+   },
+   "model": {
+    "level": 2,
+    "batch_size": 16,
+    "num_objects": 7,
+    "img_channels": 3,
+    "input_size": [
+     320,
+     480
+    ],
+    "latent_size": [
+     20,
+     30
+    ],
+    "gestalt_size": 96,
+    "bottleneck": "binar",
+    "position_regularizer": 0.01,
+    "time_regularizer": 0.1,
+    "encoder_regularizer": 0.333333,
+    "inner_loop_enabled": true,
+    "encoder": {
+     "channels": 48,
+     "level1_channels": 24,
+     "num_layers": 3,
+     "reg_lambda": 1e-10
+    },
+    "predictor": {
+     "heads": 2,
+     "layers": 2,
+     "channels_multiplier": 2,
+     "reg_lambda": 1e-10,
+     "transformer_type": "standard"
+    },
+    "decoder": {
+     "channels": 48,
+     "level1_channels": 24,
+     "num_layers": 5
+    },
+    "background": {
+     "learning_rate": 0.0001,
+     "learning_rate_old": 0.0001,
+     "num_layers": 1,
+     "latent_channels": 48,
+     "level1_channels": 24,
+     "gestalt_size": 8,
+     "flow": false
+    },
+    "update_module": {
+     "reg_lambda": 5e-06
+    }
+   }
+  }
