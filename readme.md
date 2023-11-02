@@ -3,6 +3,13 @@
 <b>TL;DR:</b> Introducing Loci-Looped, an extension to Loci, with a parameterized percept gate that learns to slot-wise fuse imaginations with sensations. As a result, Loci learns to track objects through occlusions and to imagine their trajectory. See our paper for more details: [arxiv](https://arxiv.org/abs/2310.10372)
 
 
+
+
+https://github.com/CognitiveModeling/Loci-Looped/assets/60604502/2b6d5fcf-8eeb-47db-ab26-1a9e4a3a48f0
+
+
+
+
 ---
 ## Requirements
 A suitable [conda](https://conda.io/) environment named `loci-l` can be created
