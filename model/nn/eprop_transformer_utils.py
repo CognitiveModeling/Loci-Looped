@@ -9,7 +9,8 @@ class AlphaAttention(nn.Module):
         num_hidden,
         num_objects,
         heads,
-        dropout = 0.0
+        dropout = 0.0,
+        need_weights = False
     ):
         super(AlphaAttention, self).__init__()
 
@@ -23,10 +24,13 @@ class AlphaAttention(nn.Module):
             dropout = dropout, 
             batch_first = True
         )
+        self.need_weights = need_weights
+        self.att_weights  = None
 
     def forward(self, x: th.Tensor):
         x = self.to_sequence(x)
-        x = x + self.alpha * self.attention(x, x, x, need_weights=False)[0]
+        att, self.att_weights = self.attention(x, x, x, need_weights=self.need_weights)
+        x = x + self.alpha * att
         return self.to_batch(x)
 
 class InputEmbeding(nn.Module):

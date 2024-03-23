@@ -35,13 +35,21 @@ class EpropGateL0rdTransformer(nn.Module):
 
         _layers.append(OutputEmbeding(num_hidden, num_outputs))
         self.layers = nn.Sequential(*_layers)
+        self.attention = []
+        self.l0rds = []
+        for l in self.layers: 
+            if 'AlphaAttention' in type(l).__name__:
+                self.attention.append(l)
+            elif 'EpropAlphaGateL0rd' in type(l).__name__:
+                self.l0rds.append(l)
 
     def get_openings(self):
-        openings = 0
+        openings = []
         for i in range(self.depth):
-            openings += self.layers[2 * (i + 1)].l0rd.openings.item()
+            openings.append(self.l0rds[i].l0rd.openings_perslot)
 
-        return openings / self.depth
+        openings = th.mean(th.stack(openings, dim=0), dim=0)
+        return openings
 
     def get_hidden(self):
         states = []

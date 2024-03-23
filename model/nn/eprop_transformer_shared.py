@@ -39,11 +39,12 @@ class EpropGateL0rdTransformerShared(nn.Module):
         self.output_embeding = OutputEmbeding(num_hidden, num_outputs) 
 
     def get_openings(self):
-        openings = 0
+        openings = []
         for i in range(self.depth):
-            openings += self.l0rds[i].l0rd.openings.item()
+            openings.append(self.l0rds[i].l0rd.openings_perslot)
 
-        return openings / self.depth
+        openings = th.mean(th.stack(openings, dim=0), dim=0)
+        return openings
 
     def get_hidden(self):
         return self.hidden
