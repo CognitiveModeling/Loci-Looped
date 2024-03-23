@@ -1,6 +1,6 @@
 # LOOPING LOCI: Learning Object Permanence from Videos
 
-<b>TL;DR:</b> Introducing Loci-Looped, an extension to Loci, with a parameterized percept gate that learns to slot-wise fuse imaginations with sensations. As a result, Loci learns to track objects through occlusions and to imagine their trajectory. See our paper for more details: [arxiv](https://arxiv.org/abs/2310.10372)
+<b>TL;DR:</b> Introducing Loci-Looped, an extension to Loci, with a parameterized percept gate that learns to slot-wise fuse imaginations with sensations. As a result, Loci learns to track objects through occlusions and to imagine their trajectory. See th eproject page: [Page] (https://cognitivemodeling.github.io/Loci-Looped) See our paper for more details: [arxiv](https://arxiv.org/abs/2310.10372)
 
 
 
