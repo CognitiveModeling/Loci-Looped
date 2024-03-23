@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<!-- Code borrowed from https://slotformer.github.io/-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="SlotFormer" />
+        <meta name="author" content="anonymous" />
+
+        <title>Looping Loci</title>
+        <!-- Bootstrap core CSS -->
+        <!--link href="bootstrap.min.css" rel="stylesheet"-->
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous"
+        />
+
+        <!-- Custom styles for this template -->
+        <link href="offcanvas.css" rel="stylesheet" />
+        <!--    <link rel="icon" href="img/favicon.gif" type="image/gif">-->
+        <style type="text/css">
+            .container {
+                zoom: 1;
+                margin-left: auto;
+                margin-right: auto;
+                vertical-align: middle;
+                width: 100%;
+                max-width: 1000px;
+                font-size: 18px;
+            }
+            .container_img {
+                zoom: 1;
+                margin-left: auto;
+                margin-right: auto;
+                vertical-align: middle;
+                width: 100%;
+                max-width: 1200px;
+            }
+        </style>
+
+        <!-- MathJax -->
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+              tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+              }
+            });
+        </script>
+
+        <script
+            type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        ></script>
+
+    </head>
+
+    <body>
+        <div class="jumbotron jumbotron-fluid" style="background-color: lightgrey">
+            <div class="container" align="center">
+                <h2>
+                    Learning Object Permanence from Videos via Latent Imaginations
+                </h2>
+                <p>
+                    Manuel Traub<sup>*</sup> &nbsp;
+                    Frederic Becker<sup>*</sup> &nbsp;
+                    Sebastian Otte &nbsp;
+                    Martin V. Butz &nbsp;
+                    <br/>
+                    Cognitive Modeling Group, University of Tübingen
+                    <br/>
+                    <sup>*</sup> Equal contribution
+                </p>
+                <h5>
+                    <a href="https://arxiv.org/abs/2310.10372" style="color:rgb(109, 109, 109)">Paper</a>&nbsp;
+                    <a href="https://github.com/CognitiveModeling/Loci-Looped" style="color:rgb(109, 109, 109)">Code</a>&nbsp;
+                </h5>
+            </div>
+        </div>
+
+        <!--------------------- Teaser --------------------->
+        <div class="container">
+            <p align="center">
+                <img
+                    border="0"
+                    src="src/phyre/task-21/00021133.gif"
+                    style="width: 30%"
+                />
+                &nbsp;
+                <img
+                    border="0"
+                    src="src/phyre/task-22/00022819.gif"
+                    style="width: 30%"
+                />
+                &nbsp;
+                <img
+                    border="0"
+                    src="src/phyre/task-7/00007001.gif"
+                    style="width: 30%"
+                />
+            </p>
+        </div>
+
+        <!--------------------- Abstract --------------------->
+        <br />
+        <div class="container">
+            <div align="center"><h2>Abstract</h2></div>
+            <hr />
+            <p>
+            While human infants exhibit knowledge about
+            object permanence from two months of age onwards, deep-learning approaches still largely fail
+            to recognize objects’ continued existence. We introduce a slot-based autoregressive deep learning
+            system, the looped location and identity tracking model Loci-Looped, which learns to adaptively 
+            fuse latent imaginations with pixel-space
+            observations into consistent latent object-specific
+            what and where encodings over time. The novel
+            loop empowers Loci-Looped to learn the physical concepts of object permanence, directional
+            inertia, and object solidity through observation
+            alone. As a result, Loci-Looped tracks objects
+            through occlusions, anticipates their reappearance,
+            and shows signs of surprise and internal revisions
+            when observing implausible object behavior. Notably, Loci-Looped outperforms state-of-the-art
+            baseline models in handling object occlusions
+            and temporary sensory interruptions while exhibiting more compositional, interpretable internal
+             activity patterns. Our work thus introduces the
+            first self-supervised interpretable learning model
+            that learns about object permanence directly from
+            video data without supervision.
+            </p>
+        </div>
+
+        <!--------------------- Method --------------------->
+        <br />
+        <div class="container">
+            <div align="center"><h2>Method</h2></div>
+            <hr />
+        </div>
+        <div class="container">
+            <p>
+        We propose Loci-Looped,
+        which augments the object-centric encoder-transition-decoder 
+        architecture of Loci-v1 (Traub et al., 2023) with the ability to fuse latent
+        temporal imaginations with pixel-space observations into
+        consistent, compositional scene percepts. While an outer
+        sensory loop allows Loci-Looped to build and update representations
+        of visible objects, the novel inner loop allows
+        to imagine object-centric latent state dynamics — much like
+        the dreamer architecture (Hafner et al., 2020; Wu et al.,
+        2023a). The inner loop thus enables Loci-Looped to simulate the 
+        state of temporarily hidden objects over time. Importantly, 
+        Loci-Looped learns without supervision to adaptively
+        fuse external, sensory information with internal, anticipated
+        information for each object individually via a parameterized percept gate.
+            </p>
+        </div>
+        <br />
+        <div class="container_img">
+            <p align="center">
+                <img border="0" src="images/loci-v2-arch2-fixed.png" style="width: 75%" />
+            </p>
+        </div>
+
+        <div class="container">
+            <p>
+        Visibility masks outputted by most compositional scene representation models 
+        exclusively depict visible components of objects. To enable a holistic scene 
+        understanding, we introduce Object masks that are designed to encode entire 
+        object shapes. These masks enable additional interpretability on occluded object parts.
+            </p>
+        </div>
+        <br />
+        <div class="container_img">
+            <p align="center">
+                <img border="0" src="images/inputs6.png" style="width: 50%" />
+            </p>
+        </div>
+        
+        <!--------------------- Qualitative Results --------------------->
+        <br />
+        <div class="container">
+
+            <!--------------------- ADEPT --------------------->
+            <div align="center"><h3>Tracking Objects through Occlusion</h3></div>
+            <hr />
+            <p>
+            We use the ADEPT vanish scenario
+            as test set, which  starts with a large screen placed in
+            the center of the scene. Then one or two objects enter the
+            scene from opposite directions, disappear behind the screen,
+            traverse the area behind the screen while hidden, reappear
+            on the other side of the screen, and finally exit the scene.
+            Here we display the model's imaginations of the occluded objects. 
+            Only Loci-Looped is able to imagine the objects' continued existence.
+            </p>
+            <div align="center">
+                <h5>
+                    <table style="width: 100%; text-align: center">
+                        <tr>
+                            <td style="width: 25.0%">Input</td>
+                            <td style="width: 25.0%">Loci-Looped (Ours)</td>
+                            <td style="width: 25.0%">Loci-Unlooped</td>
+                            <td style="width: 25.0%">G-SWM</td>
+                        </tr>
+                    </table>
+                </h5>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+            <p align="center">
+                <img
+                    border="0"
+                    src="gifs/ADEPT/gt1.gif"
+                    style="width: 90%"
+                />
+            </p>
+            <p align="center">
+                <img
+                    border="0"
+                    src="gifs/ADEPT/looped1.gif"
+                    style="width: 90%"
+                />
+            </p>
+            <p align="center">
+                <img
+                    border="0"
+                    src="gifs/ADEPT/unlooped1.gif"
+                    style="width: 90%"
+                />
+            </p>
+            <p align="center">
+                <img
+                    border="0"
+                    src="gifs/ADEPT/gswm1.gif"
+                    style="width: 90%"
+                />
+            </p>
+             </div>
+
+             <div style="display: flex; justify-content: center; align-items: center;">
+                <p align="center">
+                    <img
+                        border="0"
+                        src="gifs/ADEPT/gt2.gif"
+                        style="width: 90%"
+                    />
+                </p>
+                <p align="center">
+                    <img
+                        border="0"
+                        src="gifs/ADEPT/looped2.gif"
+                        style="width: 90%"
+                    />
+                </p>
+                <p align="center">
+                    <img
+                        border="0"
+                        src="gifs/ADEPT/unlooped2.gif"
+                        style="width: 90%"
+                    />
+                </p>
+                <p align="center">
+                    <img
+                        border="0"
+                        src="gifs/ADEPT/gswm2.gif"
+                        style="width: 90%"
+                    />
+                </p>
+                 </div>
+
+            <p>
+                The video displays Loci-Looped's scene perception. The overall architecture fosters disentangled object
+                representations and explicit information fusion, which allows for a high degree of interpretability. 
+            </p>
+
+            <!-- video width="100%" controls>
+                <source src="videos/adept.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video -->
+
+            <img
+            border="0"
+            src="gifs/ADEPT/looped_control.gif"
+            style="width: 100%"
+            />
+
+            <!--------------------- VoE --------------------->
+            <br/><br/>
+            <div align="center"><h3>Violation of Expectation</h3></div>
+            <hr />
+            <p>
+                We focus on the ADEPT's vanish scenario that tests the concept 
+                of object permanence and directional inertia. The surprise condition
+                (11 videos) features two objects that again traverse the scene behind
+                the occluder this time, however, only one object reappears from 
+                behind the screen whereas the other vanishes while behind 
+                the screen. This scenario is designed to test the model's anticipation 
+                about the reappearance of the occluded object.
+            </p>
+            <!-- video width="100%" controls>
+                <source src="videos/surprise.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video -->
+
+            <img
+            border="0"
+            src="gifs/ADEPT/looped_surprise.gif"
+            style="width: 100%"
+            />
+
+            <br/><br/>
+            <p> 
+                The model's surprise response indicates a significantly greater level of 
+                surprise when hidden objects fail to reappear showing a clear violation of expectation.
+                Note that this behavior is fully emergent, as Loci-Looped is never trained on objects 
+                that permanently disappear behind occluders, and shows the model's
+                strong bias to maintain stable, consistent object representations.
+            </p>
+
+            
+            <div class="container_img">
+                <p align="center">
+                    <img border="0" src="images/loci_looped_voe3.png" style="width: 75%" />
+                </p>
+            </div>
+
+
+            
+            <!--------------------- CLEVRER --------------------->
+            <br />
+            <div align="center"><h3>Sensory Interruptions</h3></div>
+            <hr />
+            <p>
+                Having seen that Loci-Looped can handle the representation of partially observable scenes, we 
+                now investigate how it behaves when no observation is available for a brief period of time, 
+                simulating a short blink or visual blackout using the CLEVRER dataset. Loci-Looped is able to
+                maintain the object representations during the blackout period and correctly predict the object
+                dynamics in the blackout period.
+            </p>
+
+            <!-- video width="100%" controls>
+                <source src="videos/blackout.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video -->
+            <img
+            border="0"
+            src="gifs/CLEVRER/blackout.gif"
+            style="width: 100%"
+            />
+            <br/><br/>
+
+            <!--------------------- PHYRE --------------------->
+            <br />
+            <div align="center"><h3>Imaginations over long sequences</h3></div>
+            <hr />
+            <p>
+                While the above addressed sensory interruptions last only for short time periods, 
+                we now test how well the model can generalize to long interruptions, 
+                by predicting scene dynamics over a long temporal horizon. We see that Loci-Looped
+                is able to maintain the object representations over long sequences and predict
+                the object dynamics also in the long term.
+            </p>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <p align="center">
+                    <img
+                        border="0"
+                        src="gifs/BB/bb_collision.gif"
+                        style="width: 90%"
+                    />
+                </p>
+                <p align="center">
+                    <img
+                        border="0"
+                        src="gifs/BB/bb_noncollision.gif"
+                        style="width: 90%"
+                    />
+                </p>
+            </div>
+           
+
+            <!--------------------- Real World--------------------->
+            <br />
+            <div align="center"><h3>Real-World Videos</h3></div>
+            <hr />
+            <p>
+                The approach is not limited to synthetic data but can also be applied to real-world videos.
+                In this case Loci-Looped is able to track cars through occlusions while maintaining complete object 
+                shapes and representations.
+            </p>
+            <img
+            border="0"
+            src="gifs/CARS/cars.gif"
+            style="width: 100%"
+            />
+            <br/><br/>
+
+        <!--------------------- References --------------------->
+        <br /><br />
+        <div class="container">
+            <div align="center"><h2>References</h2></div>
+            <hr />
+            <p>
+                [1] Lin, Zhixuan, et al. "Improving generative imagination in
+                object-centric world models." ICML. 2020.
+                <br />
+                [2] Yi, Kexin, et al. "CLEVRER: CoLlision Events for Video
+                REpresentation and Reasoning." ICLR. 2020.
+                <br />
+                [3] Traub, Manuel, et al. "Learning What and Where: Disentangling 
+                Location and Identity Tracking Without Supervision." ICLR. 2023.
+                <br />
+                [4] Yi, Kexin, et al. "CLEVRER: CoLlision Events for Video
+                REpresentation and Reasoning." ICLR. 2020.
+                <br />
+                [5] Hafner, Lillicrap, et al. "Dream to Control: Learning Behaviors by Latent Imagination."
+                arxiv. 2020.
+                <br />
+                [6] Smith, Kevin, et al. "Modeling expectation violation in intuitive physics 
+                with coarse probabilistic object representations." NeurIPS. 2019.
+                <br />
+                [7] Kipf, Thomas, et al. "Conditional Object-Centric Learning
+                from Video." ICLR. 2021.
+            </p>
+        </div>
+
+        <br /><br /><br />
+    </body>
+</html>
