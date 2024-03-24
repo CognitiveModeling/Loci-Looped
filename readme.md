@@ -32,7 +32,7 @@ Download the *data* folder and place it in the */data* folder.
 The model's performances on the testsets are stored as csv files in the respective results folders. To re-generate these results run: 
 
 ```
-sh run_evaluation.py
+sh run_evaluation.sh
 ```
 
 To test a single Loci model on the testset run:
